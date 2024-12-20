@@ -1,0 +1,47 @@
+# Visual Studio archivos de usuario
+.vscode/
+*.code-workspace
+*.suo
+*.user
+*.userosscache
+*.userprefs
+.vscode/
+
+# Archivos de trabajo de Visual Studio
+*.local
+*.cache
+*.log
+*.pdb
+
+# Binarios
+/bin/
+/x64/
+/x86/
+/intermediates/
+
+# Carpeta de build
+/build/
+/Debug/
+/Release/
+*.obj
+*.exe
+*.dll
+*.lib
+*.vcxproj.user
+
+# Otros archivos de Visual Studio
+.vs/
+.vscode/
+
+# Directorios de dependencia
+/.vs/
+.idea/
+.vscode/
+
+# Archivos temporales del sistema
+*~
+*#
+
+# Archivos ocultos del sistema
+.DS_Store
+Thumbs.db
