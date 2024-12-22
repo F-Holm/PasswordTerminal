@@ -13,6 +13,7 @@ const static string ADD = "-_-_-_-";
 
 string OpenSSL::encriptar(string key, const string STR, string& tag) {
     tag = "";
+    key = OpenSSL::hashear256(key);
 
     static OSSL_LIB_CTX* libctx = NULL;
     static const char* propq = NULL;
@@ -59,6 +60,6 @@ string OpenSSL::encriptar(string key, const string STR, string& tag) {
     return rta;
 }
 
-string OpenSSL::desencriptar(string key, const string STR, string& tag) {
+string OpenSSL::desencriptar(string key, const string STR, const string TAG) {
 	return "";
 }

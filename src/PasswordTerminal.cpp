@@ -25,15 +25,18 @@ static void testGenerador(const unsigned int CANT_CARACTERES) {
 static void testHasheo(string str) {
     cout << "Test hasheo: " << endl;
     cout << OpenSSL::hashear256(str) << endl;
-    cout << OpenSSL::hashear256(str).size() << endl;
+    cout << OpenSSL::hashear256(str).size() << " Bytes" << endl;
+    cout << OpenSSL::hashear256(str).size() * 8 << " bits" << endl;
     cout << endl;
 }
 
-static void testEncriptar(const string KEY, const string STR, string& tag) {
+static void testEncriptar(const string KEY, const string STR) {
+    string tag = "";
     cout << "Test encriptación: " << endl;
     cout << STR << endl;
     cout << OpenSSL::encriptar(KEY, STR, tag) << endl;
     cout << tag << endl;
+    cout << OpenSSL::desencriptar(KEY, STR, tag);
     cout << endl;
 }
 
@@ -41,7 +44,6 @@ int main()
 {
     testGenerador(120);
     testHasheo("Este es un mensaje super ultra secreto");
-    string tag = "";
-    testEncriptar("Clave super ultra mega secreta", "Este es un mensaje super ultra mega secreto", tag);
+    testEncriptar("Clave super ultra mega secreta", "Este es un mensaje super ultra mega secreto");
     return 0;
 }
