@@ -1,13 +1,7 @@
 #include "OpenSSL.h"
-#include <iomanip>
-#include <sstream>
-#include <iostream>
-//#include <windows.h>
-//#include <wincrypt.h>
 #pragma comment (lib, "crypt32")
 #pragma comment (lib, "Ws2_32")
 #include <openssl/sha.h>
-#include <string>
 
 std::string OpenSSL::hashear(std::string str) {
     unsigned char hash[SHA256_DIGEST_LENGTH];
