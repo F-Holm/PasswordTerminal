@@ -1,16 +1,41 @@
 #include <iostream>
-#include "Generador.h"
+#include "Generador/Generador.h"
+#include "Seguridad/Seguridad.h"
+#include "Seguridad/OpenSSL/OpenSSL.h"
+#include <openssl/sha.h>
+
+using std::string;
+using std::cout;
+using std::cin;
+using std::endl;
+
+void static testGenerador(const unsigned int CANT_CARACTERES) {
+    cout << Generador::generarContrasenia(CANT_CARACTERES, Generador::TipoContrasenia::COMPLETA) << endl;
+    cout << Generador::generarContrasenia(CANT_CARACTERES, Generador::TipoContrasenia::ALFANUMERICA) << endl;
+    cout << Generador::generarContrasenia(CANT_CARACTERES, Generador::TipoContrasenia::ALFANUMERICA_MAYUSCULA) << endl;
+    cout << Generador::generarContrasenia(CANT_CARACTERES, Generador::TipoContrasenia::ALFANUMERICA_MINUSCULA) << endl;
+    cout << Generador::generarContrasenia(CANT_CARACTERES, Generador::TipoContrasenia::ALFABETICA) << endl;
+    cout << Generador::generarContrasenia(CANT_CARACTERES, Generador::TipoContrasenia::ALFABETICA_MAYUSCULA) << endl;
+    cout << Generador::generarContrasenia(CANT_CARACTERES, Generador::TipoContrasenia::ALFABETICA_MINUSCULA) << endl;
+    cout << Generador::generarContrasenia(CANT_CARACTERES, Generador::TipoContrasenia::NUMERICA) << endl;
+}
+
+void static testHasheo(const string MSG) {
+    cout << OpenSSL::hashear(MSG) << endl;
+}
 
 int main()
 {
-    int cant = 50;
-    std::cout << Generador::generarContrasenia(cant, Generador::TipoContrasenia::COMPLETA) << std::endl;
-    std::cout << Generador::generarContrasenia(cant, Generador::TipoContrasenia::ALFANUMERICA) << std::endl;
-    std::cout << Generador::generarContrasenia(cant, Generador::TipoContrasenia::ALFANUMERICA_MAYUSCULA) << std::endl;
-    std::cout << Generador::generarContrasenia(cant, Generador::TipoContrasenia::ALFANUMERICA_MINUSCULA) << std::endl;
-    std::cout << Generador::generarContrasenia(cant, Generador::TipoContrasenia::ALFABETICA) << std::endl;
-    std::cout << Generador::generarContrasenia(cant, Generador::TipoContrasenia::ALFABETICA_MAYUSCULA) << std::endl;
-    std::cout << Generador::generarContrasenia(cant, Generador::TipoContrasenia::ALFABETICA_MINUSCULA) << std::endl;
-    std::cout << Generador::generarContrasenia(cant, Generador::TipoContrasenia::NUMERICA) << std::endl;
+    testGenerador(120);
+    testHasheo("Este es un mensaje super ultra secreto");
+    testHasheo("Este es un mensaje super ultra secreto");
+    testHasheo("Este es un mensaje super ultra secreto");
+    testHasheo("Este es un mensaje super ultra secreto");
+    testHasheo("Este es un mensaje super ultra secreto");
+    testHasheo("Este es un mensaje super ultra secreto");
+    testHasheo("Este es un mensaje super ultra secreto");
+    testHasheo("Este es un mensaje super ultra secreto");
+    testHasheo("Este es un mensaje super ultra secreto");
+    testHasheo("Este es un mensaje super ultra secreto");
     return 0;
 }
