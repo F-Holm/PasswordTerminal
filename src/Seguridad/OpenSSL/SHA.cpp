@@ -7,19 +7,14 @@
 #pragma comment (lib, "crypt32")
 #pragma comment (lib, "Ws2_32")
 #include <openssl/sha.h>
+#include <string>
 
 std::string OpenSSL::hashear(std::string str) {
     unsigned char hash[SHA256_DIGEST_LENGTH];
 
     SHA256(reinterpret_cast<const unsigned char*>(str.c_str()), str.size(), hash);
 
-    std::stringstream ss;
+    std::string rta(reinterpret_cast<const char*>(hash), SHA256_DIGEST_LENGTH);
 
-    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
-        ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(hash[i]);
-    }
-    return ss.str();
-
-
-
+    return rta;
 }

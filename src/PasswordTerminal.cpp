@@ -20,22 +20,14 @@ void static testGenerador(const unsigned int CANT_CARACTERES) {
     cout << Generador::generarContrasenia(CANT_CARACTERES, Generador::TipoContrasenia::NUMERICA) << endl;
 }
 
-void static testHasheo(const string MSG) {
-    cout << OpenSSL::hashear(MSG) << endl;
+void static testHasheo(string str) {
+    cout << OpenSSL::hashear(str) << endl;
+    cout << OpenSSL::hashear(str).size() << endl;
 }
 
 int main()
 {
     testGenerador(120);
-    testHasheo("Este es un mensaje super ultra secreto");
-    testHasheo("Este es un mensaje super ultra secreto");
-    testHasheo("Este es un mensaje super ultra secreto");
-    testHasheo("Este es un mensaje super ultra secreto");
-    testHasheo("Este es un mensaje super ultra secreto");
-    testHasheo("Este es un mensaje super ultra secreto");
-    testHasheo("Este es un mensaje super ultra secreto");
-    testHasheo("Este es un mensaje super ultra secreto");
-    testHasheo("Este es un mensaje super ultra secreto");
     testHasheo("Este es un mensaje super ultra secreto");
     return 0;
 }
