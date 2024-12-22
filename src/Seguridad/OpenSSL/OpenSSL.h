@@ -1,8 +1,10 @@
 #pragma once
 #include <string>
 
+using std::string;
+
 namespace OpenSSL {
-	std::string hashear(std::string str);
-	std::string encriptar(std::string key, std::string str);
-	std::string desencriptar(std::string key, std::string str);
+	string hashear256(string str);
+	string encriptar(string key, const string STR, string& tag);
+	string desencriptar(string key, const string STR, string& tag);
 }
