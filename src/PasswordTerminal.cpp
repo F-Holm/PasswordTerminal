@@ -28,6 +28,7 @@ static void testGenerador(const uint8_t CANT_CARACTERES) {
 }
 
 static void testHasheo(const unsigned char* STR, const unsigned short& LEN_STR, const unsigned short& LEN_HASH) {
+    cout << "Texto original: " << endl;
     mostrarChar(STR, LEN_STR);
     cout << "Test hasheo: " << endl;
     mostrarChar(OpenSSL::hash256(STR, LEN_STR), 32);
