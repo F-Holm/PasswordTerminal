@@ -1,5 +1,4 @@
 #include "Generador.h"
-#include <iostream>
 #include <random>
 
 static void setRand() {
