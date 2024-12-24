@@ -39,16 +39,23 @@ static void testHasheo(const unsigned char* STR, const unsigned short& LEN_STR, 
 
 static void testEncriptar(const unsigned char* KEY, const unsigned char* STR) {
     unsigned char* tag = nullptr;
+
     cout << "Texto original:" << endl;
     mostrarChar(STR, 38);
+
     cout << "Test encriptado:" << endl;
     unsigned short lenRta;
     unsigned char* cifrado = OpenSSL::encriptar(KEY, STR, 38, tag, lenRta);
     mostrarChar(cifrado, lenRta);
-    /*cout << "Test desencriptado:" << endl;
+
+    cout << "Tag" << " -> " << (tag == nullptr);
+    mostrarChar(tag, 16);
+
+    cout << "Test desencriptado:" << endl;
     unsigned short lenRtaRta;
     unsigned char* descifrado = OpenSSL::desencriptar(KEY, STR, lenRta, tag, lenRtaRta);
-    mostrarChar(descifrado, lenRtaRta);*/
+    mostrarChar(descifrado, lenRtaRta);
+
     cout << endl;
 }
 
