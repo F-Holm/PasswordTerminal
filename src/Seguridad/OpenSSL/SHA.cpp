@@ -2,13 +2,10 @@
 #pragma comment (lib, "crypt32")
 #pragma comment (lib, "Ws2_32")
 #include <openssl/sha.h>
+#include <string>
 
-string OpenSSL::hashear256(string str) {
-    unsigned char hash[SHA256_DIGEST_LENGTH];
-
-    SHA256(reinterpret_cast<const unsigned char*>(str.c_str()), str.size(), hash);
-
-    string rta(reinterpret_cast<const char*>(hash), SHA256_DIGEST_LENGTH);
-
+unsigned char* OpenSSL::hash256(unsigned char* str, const unsigned short& len) {
+    unsigned char* rta = new unsigned char[256];
+    SHA256(str, len, rta);
     return rta;
 }

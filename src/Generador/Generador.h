@@ -1,9 +1,8 @@
 #pragma once
-
-#include <string>
+#include <cstdint>
 
 namespace Generador{
-    enum class TipoContrasenia : int {
+    enum class TipoContrasenia : unsigned short {
         COMPLETA = 0,
         ALFANUMERICA = 1,
         ALFANUMERICA_MAYUSCULA = 2,
@@ -13,5 +12,5 @@ namespace Generador{
         ALFABETICA_MINUSCULA = 6,
         NUMERICA = 7
     };
-    std::string generarContrasenia(const unsigned int CANT_CARACTERES, const TipoContrasenia tipo);
+    unsigned char* generarContrasenia(const uint8_t& CANT_CARACTERES, const TipoContrasenia& TIPO);
 }

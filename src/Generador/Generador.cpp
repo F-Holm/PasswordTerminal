@@ -1,25 +1,26 @@
 #include "Generador.h"
 #include <iostream>
-#include <cstdint>
+#include <random>
 
 static void setRand() {
+    std::random_device rd;
     srand(std::time(0));
 }
 
-static char caracterRandom(const char BASE, const uint8_t RANGO) {
+static unsigned char caracterRandom(const unsigned char& BASE, const uint8_t RANGO) {
     return (rand() % RANGO) + BASE;
 }
 
-static bool contraFacil(std::string contra, const Generador::TipoContrasenia tipo) {
+static bool contraFacil(unsigned char* contra, const uint8_t& LEN, const Generador::TipoContrasenia& TIPO) {
     bool minuscula = false, mayuscula = false, numero = false, simbolo = false;
-    for (unsigned int i = 0;i < contra.size();i++) {
+    for (unsigned short i = 0;i < LEN;i++) {
         if (islower(contra[i])) minuscula = true;
         else if (isupper(contra[i])) mayuscula = true;
         else if (isdigit(contra[i])) numero = true;
         else simbolo = true;
     }
 
-    switch (tipo) {
+    switch (TIPO) {
     case Generador::TipoContrasenia::COMPLETA:
         return !(minuscula && mayuscula && numero && simbolo);
         break;
@@ -44,9 +45,9 @@ static bool contraFacil(std::string contra, const Generador::TipoContrasenia tip
     }
 }
 
-static char caracter(const Generador::TipoContrasenia tipo) {
+static unsigned char caracter(const Generador::TipoContrasenia& TIPO) {
     char caracteres[3] = { 'X', 'X', 'X' };
-    switch (tipo) {
+    switch (TIPO) {
     case Generador::TipoContrasenia::COMPLETA:
         return caracterRandom('!', 94);
         break;
@@ -86,11 +87,11 @@ static char caracter(const Generador::TipoContrasenia tipo) {
     }
 }
 
-std::string Generador::generarContrasenia(const unsigned int CANT_CARACTERES, const Generador::TipoContrasenia tipo) {
-    std::string contra;
+unsigned char* Generador::generarContrasenia(const uint8_t& CANT_CARACTERES, const Generador::TipoContrasenia& TIPO) {
+    setRand();
+    unsigned char* contra = new unsigned char[CANT_CARACTERES];
     do {
-        contra = "";
-        for (unsigned int i = 0;i < CANT_CARACTERES;i++) contra += caracter(tipo);
-    } while (contraFacil(contra, tipo));
+        for (unsigned short i = 0;i < CANT_CARACTERES;i++) contra[i] = caracter(TIPO);
+    } while (contraFacil(contra, CANT_CARACTERES, TIPO));
     return contra;
 }
