@@ -4,7 +4,7 @@
 
 static void setRand() {
     std::random_device rd;
-    srand(std::time(0));
+    srand(static_cast<unsigned int>(std::time(nullptr)) ^ rd());
 }
 
 static unsigned char caracterRandom(const unsigned char& BASE, const uint8_t RANGO) {
