@@ -108,14 +108,13 @@ unsigned char* OpenSSL::desencriptar(const unsigned char* KEY, const unsigned ch
     if (!EVP_DecryptUpdate(ctx, outbuf, &outlen, STR, LEN_STR))
         goto err;
 
-    params[0] = OSSL_PARAM_construct_octet_string(OSSL_CIPHER_PARAM_AEAD_TAG, (void*)TAG, 16);
+    params[0] = OSSL_PARAM_construct_octet_string(OSSL_CIPHER_PARAM_AEAD_TAG, (void*)TAG, TAG_LEN);
 
     if (!EVP_CIPHER_CTX_set_params(ctx, params))
         goto err;
 
-    rv = EVP_DecryptFinal_ex(ctx, outbuf, &outlen);
-
-    //if (rv <= 0) printf("ERROR de verificación");
+    if (!EVP_DecryptFinal_ex(ctx, outbuf, &outlen))
+        goto err;
 
     rta = new unsigned char[outlen];
     memcpy(rta, outbuf, outlen);

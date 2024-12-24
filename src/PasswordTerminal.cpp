@@ -54,7 +54,7 @@ static void testEncriptar(const unsigned char* KEY, const unsigned char* STR) {
     cout << "Test desencriptado:" << endl;
     unsigned short lenRtaRta;
     unsigned char* descifrado = OpenSSL::desencriptar(KEY, STR, lenRta, tag, lenRtaRta);
-    mostrarChar(descifrado, lenRtaRta);
+    //mostrarChar(descifrado, lenRtaRta);
 
     cout << endl;
 }
