@@ -9,10 +9,11 @@
 #include <iostream>
 
 static size_t IV_SIZE = 12;
-const static unsigned char* IV_BASICO = "Este es un vector de inicialización super ultra mega secreto";
-const static unsigned char* IV = OpenSSL::hash256_x(IV_BASICO, 60, IV_SIZE);
-const static unsigned char* ADD = "-_-_-_-";
+const static unsigned char IV_BASICO = reinterpret_cast<unsigned char>("Este es un vector de inicialización super ultra mega secreto");
+const static unsigned char* IV = OpenSSL::hash256_x(&IV_BASICO, 60, IV_SIZE);
+
 static size_t ADD_SIZE = 7;
+const static unsigned char ADD = reinterpret_cast<unsigned char>("-_-_-_-");
 
 unsigned char* OpenSSL::encriptar(const unsigned char* KEY, const unsigned char* STR, const unsigned short& LEN_STR, unsigned char* tag, unsigned short& LEN_RTA) {
     tag = new unsigned char[16];
@@ -36,7 +37,7 @@ unsigned char* OpenSSL::encriptar(const unsigned char* KEY, const unsigned char*
 
     if (!EVP_EncryptInit_ex2(ctx, cipher, KEY, IV, params));
 
-    if (!EVP_EncryptUpdate(ctx, NULL, &outlen ,ADD, ADD_SIZE));
+    if (!EVP_EncryptUpdate(ctx, NULL, &outlen, &ADD, ADD_SIZE));
 
     if (!EVP_EncryptUpdate(ctx, outbuf, &outlen, STR, LEN_STR));
 
