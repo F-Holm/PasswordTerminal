@@ -1,6 +1,4 @@
 #include "OpenSSL.h"
-#pragma comment (lib, "crypt32")
-#pragma comment (lib, "Ws2_32")
 #include <openssl/sha.h>
 #include <string>
 
