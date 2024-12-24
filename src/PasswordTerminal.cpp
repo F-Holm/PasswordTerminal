@@ -9,7 +9,7 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-void mostrarChar(const unsigned char* STR, const uint8_t CANT_CARACTERES) {
+static void mostrarChar(const unsigned char* STR, const uint8_t CANT_CARACTERES) {
     for (unsigned short i = 0;i < CANT_CARACTERES;i++) cout << STR[i];
     cout << endl;
 }
@@ -37,15 +37,20 @@ static void testHasheo(const unsigned char* STR, const unsigned short& LEN_STR, 
     cout << endl;
 }
 
-/*static void testEncriptar(const string KEY, const string STR) {
-    string tag = "";
-    cout << "Test encriptación: " << endl;
-    cout << STR << endl;
-    cout << OpenSSL::encriptar(KEY, STR, tag) << endl;
-    cout << tag << endl;
-    cout << OpenSSL::desencriptar(KEY, STR, tag);
+static void testEncriptar(const unsigned char* KEY, const unsigned char* STR) {
+    unsigned char* tag = nullptr;
+    cout << "Texto original:" << endl;
+    mostrarChar(STR, 38);
+    cout << "Test encriptado:" << endl;
+    unsigned short lenRta;
+    unsigned char* cifrado = OpenSSL::encriptar(KEY, STR, 38, tag, lenRta);
+    mostrarChar(cifrado, lenRta);
+    /*cout << "Test desencriptado:" << endl;
+    unsigned short lenRtaRta;
+    unsigned char* descifrado = OpenSSL::desencriptar(KEY, STR, lenRta, tag, lenRtaRta);
+    mostrarChar(descifrado, lenRtaRta);*/
     cout << endl;
-}*/
+}
 
 int main()
 {
@@ -53,6 +58,7 @@ int main()
     unsigned char* str = new unsigned char[38];
     for (int i = 0;i < 38;i++) str[i] = i + 64;
     testHasheo(str, 38, 10);
-    //testEncriptar("Clave super ultra mega secreta", "Este es un mensaje super ultra mega secreto");
+    const unsigned char* CLAVE = OpenSSL::hash256(Generador::generarContrasenia(120, Generador::TipoContrasenia::COMPLETA), 120);
+    testEncriptar(CLAVE, str);
     return 0;
 }
