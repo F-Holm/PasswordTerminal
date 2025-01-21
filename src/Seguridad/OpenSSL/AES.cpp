@@ -83,8 +83,8 @@ err:
     if (error) 
         ERR_print_errors_fp(stderr);
     else {
-        str = string(*outbuf, outlen);
-        tag = string(*outtag, TAG_LEN);
+        str = string(reinterpret_cast<const char*>(outbuf), outlen);
+        tag = string(reinterpret_cast<const char*>(outtag), TAG_LEN);
     }
 
     /* Free memory */
@@ -150,7 +150,7 @@ err:
     if (error) 
         ERR_print_errors_fp(stderr);
     else if (rv > 0)
-        str = string(*outbuf, outlen);
+        str = string(reinterpret_cast<const char*>(outbuf), outlen);
 
     /* Free memory */
     EVP_CIPHER_free(cipher);

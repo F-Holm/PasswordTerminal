@@ -47,7 +47,7 @@ int main()
 {
     testGenerador(120);
     testHasheo("TESTEANDO...", 12);
-    //testEncriptar(Generador::generarContrasenia(120, Generador::TipoContrasenia::COMPLETA), "Esto es un mensaje super ultra mega secreto");
+    testEncriptar(Generador::generarContrasenia(120, Generador::TipoContrasenia::COMPLETA), "Esto es un mensaje super ultra mega secreto");
     //return AES_GCM_EJEMPLO(NULL, nullptr);
     return 0;
 }
