@@ -5,7 +5,8 @@ using std::string;
 
 string OpenSSL::hash256(string str) {
     unsigned char rta[SHA256_DIGEST_LENGTH];
-    SHA256(reinterpret_cast<unsigned char*>(&str[0]), str.size(), rta);
+    unsigned char* p = rta;
+    SHA256(reinterpret_cast<unsigned char*>(&str[0]), str.size(), p);
     string rta_str = string(*rta, 32);
     return rta_str;
 }
