@@ -1,6 +1,8 @@
 #include "Generador.h"
 #include <random>
 
+using std::string;
+
 static void setRand() {
     std::random_device rd;
     srand(static_cast<unsigned int>(std::time(nullptr)) ^ rd());
@@ -10,9 +12,9 @@ static unsigned char caracterRandom(const unsigned char& BASE, const unsigned in
     return (rand() % RANGO) + BASE;
 }
 
-static bool contraFacil(unsigned char* contra, const unsigned int& LEN, const Generador::TipoContrasenia& TIPO) {
+static bool contraFacil(string contra, const Generador::TipoContrasenia& TIPO) {
     bool minuscula = false, mayuscula = false, numero = false, simbolo = false;
-    for (unsigned short i = 0;i < LEN;i++) {
+    for (size_t i = 0;i < contra.size();i++) {
         if (islower(contra[i])) minuscula = true;
         else if (isupper(contra[i])) mayuscula = true;
         else if (isdigit(contra[i])) numero = true;
@@ -86,11 +88,11 @@ static unsigned char caracter(const Generador::TipoContrasenia& TIPO) {
     }
 }
 
-unsigned char* Generador::generarContrasenia(const unsigned int& CANT_CARACTERES, const Generador::TipoContrasenia& TIPO) {
+string Generador::generarContrasenia(const size_t CANT_CARACTERES, const Generador::TipoContrasenia& TIPO) {
     setRand();
-    unsigned char* contra = new unsigned char[CANT_CARACTERES];
+    string contra = "";
     do {
-        for (unsigned short i = 0;i < CANT_CARACTERES;i++) contra[i] = caracter(TIPO);
-    } while (contraFacil(contra, CANT_CARACTERES, TIPO));
+        for (size_t i = 0;i < CANT_CARACTERES;i++) contra += caracter(TIPO);
+    } while (contraFacil(contra, TIPO));
     return contra;
 }
