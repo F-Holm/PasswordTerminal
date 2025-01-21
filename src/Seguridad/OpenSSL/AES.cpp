@@ -5,24 +5,13 @@
 #include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/core_names.h>
-#include <string>
-#include <iostream>
 
 using std::string;
 
-struct AES {
-    string str;
-    unsigned char tag[]
-};
-
-static size_t IV_SIZE = 12;
-const static unsigned char IV_BASICO = reinterpret_cast<unsigned char>("Este es un vector de inicialización super ultra mega secreto");
-const static unsigned char* IV = OpenSSL::hash256_x(&IV_BASICO, 60, IV_SIZE);
-
-static size_t ADD_SIZE = 7;
-const static unsigned char ADD = reinterpret_cast<unsigned char>("-_-_-_-");
-
-static size_t TAG_LEN = 16;
+static string IV = OpenSSL::hash256_x("Este es un vector de inicialización super ultra mega secreto", 12);
+static string ADD = "Esto es algo totalmente innecesario";
+const static size_t TAG_LEN = 16;
+const static char* PROTOCOLO = "AES-256-GCM";
 
 /*
  * A library context and property query can be used to select & filter
@@ -32,69 +21,88 @@ static size_t TAG_LEN = 16;
 static OSSL_LIB_CTX* libctx = NULL;
 static const char* propq = NULL;
 
-unsigned char* OpenSSL::encriptar(const unsigned char* KEY, const unsigned char* STR, const unsigned int& LEN_STR, unsigned char*& tag, unsigned int& LEN_RTA) {
-    delete[] tag;
-    tag = new unsigned char[TAG_LEN];
-    unsigned char* rta;
+string OpenSSL::encriptar(string str, string key, string& tag) {
+    bool error = true;
+
+    key = OpenSSL::hash256(key);
 
     EVP_CIPHER_CTX* ctx;
     EVP_CIPHER* cipher = NULL;
     int outlen, tmplen;
+    size_t gcm_ivlen = IV.size();
     unsigned char outbuf[1024];
+    unsigned char outtag[16];
     OSSL_PARAM params[2] = {
         OSSL_PARAM_END, OSSL_PARAM_END
     };
 
+    /* Create a context for the encrypt operation */
     if ((ctx = EVP_CIPHER_CTX_new()) == NULL)
         goto err;
 
-    if ((cipher = EVP_CIPHER_fetch(libctx, "AES-256-GCM", propq)) == NULL)
+    /* Fetch the cipher implementation */
+    if ((cipher = EVP_CIPHER_fetch(libctx, PROTOCOLO, propq)) == NULL)
         goto err;
 
-    params[0] = OSSL_PARAM_construct_size_t(OSSL_CIPHER_PARAM_AEAD_IVLEN, &IV_SIZE);
+    /* Set IV length if default 96 bits is not appropriate */
+    params[0] = OSSL_PARAM_construct_size_t(OSSL_CIPHER_PARAM_AEAD_IVLEN,
+        &gcm_ivlen);
 
-    if (!EVP_EncryptInit_ex2(ctx, cipher, KEY, IV, params))
+    /*
+     * Initialise an encrypt operation with the cipher/mode, key, IV and
+     * IV length parameter.
+     * For demonstration purposes the IV is being set here. In a compliant
+     * application the IV would be generated internally so the iv passed in
+     * would be NULL.
+     */
+    if (!EVP_EncryptInit_ex2(ctx, cipher, reinterpret_cast<unsigned char*>(&key[0]), reinterpret_cast<unsigned char*>(&IV[0]), params))
         goto err;
 
-    if (!EVP_EncryptUpdate(ctx, NULL, &outlen, &ADD, ADD_SIZE))
+    /* Zero or more calls to specify any AAD */
+    if (!EVP_EncryptUpdate(ctx, NULL, &outlen, reinterpret_cast<unsigned char*>(&ADD[0]), ADD.size()))
         goto err;
 
-    if (!EVP_EncryptUpdate(ctx, outbuf, &outlen, STR, LEN_STR))
+    /* Encrypt plaintext */
+    if (!EVP_EncryptUpdate(ctx, outbuf, &outlen, reinterpret_cast<unsigned char*>(&str[0]), str.size()))
         goto err;
 
+    /* Finalise: note get no output for GCM */
     if (!EVP_EncryptFinal_ex(ctx, outbuf, &tmplen))
         goto err;
 
-    params[0] = OSSL_PARAM_construct_octet_string(OSSL_CIPHER_PARAM_AEAD_TAG, tag, TAG_LEN);
+    /* Get tag */
+    params[0] = OSSL_PARAM_construct_octet_string(OSSL_CIPHER_PARAM_AEAD_TAG,
+        outtag, 16);
 
     if (!EVP_CIPHER_CTX_get_params(ctx, params))
         goto err;
 
-    rta = new unsigned char[outlen];
-    memcpy(rta, outbuf, outlen);
-
-    LEN_RTA = outlen;
-
-
-    EVP_CIPHER_free(cipher);
-    EVP_CIPHER_CTX_free(ctx);
-    return rta;
+    error = false;
 
 err:
-    ERR_print_errors_fp(stderr);
+    if (error) 
+        ERR_print_errors_fp(stderr);
+    else {
+        str = string(*outbuf, outlen);
+        tag = string(*outtag, TAG_LEN);
+    }
 
+    /* Free memory */
     EVP_CIPHER_free(cipher);
     EVP_CIPHER_CTX_free(ctx);
 
-    return nullptr;
+    return error ? "" : str;
 }
 
-unsigned char* OpenSSL::desencriptar(const unsigned char* KEY, const unsigned char* STR, const unsigned int& LEN_STR, const unsigned char* TAG, unsigned int& LEN_RTA) {
-    unsigned char* rta;
-    
+string OpenSSL::desencriptar(string str, string key, string tag) {
+    bool error = true;
+
+    key = OpenSSL::hash256(key);
+
     EVP_CIPHER_CTX* ctx;
     EVP_CIPHER* cipher = NULL;
     int outlen, rv;
+    size_t gcm_ivlen = IV.size();
     unsigned char outbuf[1024];
     OSSL_PARAM params[2] = {
         OSSL_PARAM_END, OSSL_PARAM_END
@@ -103,42 +111,50 @@ unsigned char* OpenSSL::desencriptar(const unsigned char* KEY, const unsigned ch
     if ((ctx = EVP_CIPHER_CTX_new()) == NULL)
         goto err;
 
-    if ((cipher = EVP_CIPHER_fetch(libctx, "AES-256-GCM", propq)) == NULL)
+    /* Fetch the cipher implementation */
+    if ((cipher = EVP_CIPHER_fetch(libctx, PROTOCOLO, propq)) == NULL)
         goto err;
 
-    params[0] = OSSL_PARAM_construct_size_t(OSSL_CIPHER_PARAM_AEAD_IVLEN, &IV_SIZE);
+    /* Set IV length if default 96 bits is not appropriate */
+    params[0] = OSSL_PARAM_construct_size_t(OSSL_CIPHER_PARAM_AEAD_IVLEN,
+        &gcm_ivlen);
 
-    if (!EVP_DecryptInit_ex2(ctx, cipher, KEY, IV, params))
+    /*
+     * Initialise an encrypt operation with the cipher/mode, key, IV and
+     * IV length parameter.
+     */
+    if (!EVP_DecryptInit_ex2(ctx, cipher, reinterpret_cast<unsigned char*>(&key[0]), reinterpret_cast<unsigned char*>(&IV[0]), params))
         goto err;
 
-    if (!EVP_DecryptUpdate(ctx, NULL, &outlen, &ADD, ADD_SIZE))
+    /* Zero or more calls to specify any AAD */
+    if (!EVP_DecryptUpdate(ctx, NULL, &outlen, reinterpret_cast<unsigned char*>(&ADD[0]), ADD.size()))
         goto err;
 
-    if (!EVP_DecryptUpdate(ctx, outbuf, &outlen, STR, LEN_STR))
+    /* Decrypt plaintext */
+    if (!EVP_DecryptUpdate(ctx, outbuf, &outlen, reinterpret_cast<unsigned char*>(&str[0]), str.size()))
         goto err;
 
-    params[0] = OSSL_PARAM_construct_octet_string(OSSL_CIPHER_PARAM_AEAD_TAG, (void*)TAG, TAG_LEN);
+    /* Set expected tag value. */
+    params[0] = OSSL_PARAM_construct_octet_string(OSSL_CIPHER_PARAM_AEAD_TAG,
+        (void*)reinterpret_cast<unsigned char*>(&tag[0]), tag.size());
 
     if (!EVP_CIPHER_CTX_set_params(ctx, params))
         goto err;
 
-    if (!EVP_DecryptFinal_ex(ctx, outbuf, &outlen))
-        goto err;
-
-    rta = new unsigned char[outlen];
-    memcpy(rta, outbuf, outlen);
-
-    LEN_RTA = outlen;
-
-    EVP_CIPHER_free(cipher);
-    EVP_CIPHER_CTX_free(ctx);
-    return rta;
+    /* Finalise: note get no output for GCM */
+    rv = EVP_DecryptFinal_ex(ctx, outbuf, &outlen);
+    
+    error = false;
 
 err:
-    ERR_print_errors_fp(stderr);
+    if (error) 
+        ERR_print_errors_fp(stderr);
+    else if (rv > 0)
+        str = string(*outbuf, outlen);
 
+    /* Free memory */
     EVP_CIPHER_free(cipher);
     EVP_CIPHER_CTX_free(ctx);
 
-    return nullptr;
+    return (error || rv <= 0) ? "" : str;
 }

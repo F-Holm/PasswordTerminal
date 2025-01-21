@@ -1,17 +1,16 @@
 #include "OpenSSL.h"
 #include <openssl/sha.h>
-#include <string>
 
-unsigned char* OpenSSL::hash256(const unsigned char* STR, const unsigned int& LEN_STR) {
-    unsigned char* rta = new unsigned char[SHA256_DIGEST_LENGTH];
-    SHA256(STR, LEN_STR, rta);
-    return rta;
+using std::string;
+
+string OpenSSL::hash256(string str) {
+    unsigned char rta[SHA256_DIGEST_LENGTH];
+    SHA256(reinterpret_cast<unsigned char*>(&str[0]), str.size(), rta);
+    string rta_str = string(*rta, 32);
+    delete rta;
+    return rta_str;
 }
 
-unsigned char* OpenSSL::hash256_x(const unsigned char* STR, const unsigned int& LEN_STR, const unsigned int& LEN_RTA) {
-    unsigned char* TEMP = OpenSSL::hash256(STR, LEN_STR);
-    unsigned char* RTA = new unsigned char[LEN_RTA];
-    memcpy(RTA, TEMP, LEN_RTA);
-    delete[] TEMP;
-    return RTA;
+string OpenSSL::hash256_x(string str, const size_t& LEN_RTA) {
+    return OpenSSL::hash256(str).substr(0, LEN_RTA);
 }
