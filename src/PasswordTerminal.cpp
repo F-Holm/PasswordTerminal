@@ -9,7 +9,7 @@ using std::cout;
 using std::cin;
 using std::endl;
 
-static void testGenerador(const uint8_t CANT_CARACTERES) {
+static void testGenerador(const size_t CANT_CARACTERES) {
     cout << "Test generador: " << endl;
     cout << Generador::generarContrasenia(CANT_CARACTERES, Generador::TipoContrasenia::COMPLETA) << endl;
     cout << Generador::generarContrasenia(CANT_CARACTERES, Generador::TipoContrasenia::ALFANUMERICA) << endl;
@@ -25,7 +25,7 @@ static void testGenerador(const uint8_t CANT_CARACTERES) {
 static void testHasheo(const string STR, const size_t LEN_HASH) {
     cout << "Texto original: " << STR << endl;
     cout << "Test hasheo: " << OpenSSL::hash256(STR) << endl;
-    cout << "Test hasheo x = " << LEN_HASH << ":" << OpenSSL::hash256_x(STR, LEN_HASH) << endl;
+    cout << "Test hasheo x = " << LEN_HASH << " -> " << OpenSSL::hash256_x(STR, LEN_HASH) << endl;
     cout << endl;
 }
 
