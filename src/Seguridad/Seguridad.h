@@ -3,16 +3,16 @@
 
 struct MensajeEncriptado {
 	unsigned char id[256];
-	uint8_t lenID;
+	unsigned int lenID;
 
 	unsigned char mail[256];
-	uint8_t lenMail;
+	unsigned int lenMail;
 
 	unsigned char nombreUsuario[256];
-	uint8_t lenNombreUsuario;
+	unsigned int lenNombreUsuario;
 
 	unsigned char contra[256];
-	uint8_t lenContra;
+	unsigned int lenContra;
 
 	unsigned char add[65536];
 	unsigned short lenAdd;

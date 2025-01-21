@@ -3,6 +3,7 @@
 #include "Seguridad/Seguridad.h"
 #include "Seguridad/OpenSSL/OpenSSL.h"
 #include <openssl/sha.h>
+#include "aesgcm.hpp"
 
 using std::string;
 using std::cout;
@@ -44,7 +45,7 @@ static void testEncriptar(const unsigned char* KEY, const unsigned char* STR) {
     mostrarChar(STR, 38);
 
     cout << "Test encriptado:" << endl;
-    unsigned short lenRta;
+    unsigned int lenRta;
     unsigned char* cifrado = OpenSSL::encriptar(KEY, STR, 38, tag, lenRta);
     mostrarChar(cifrado, lenRta);
 
@@ -52,20 +53,37 @@ static void testEncriptar(const unsigned char* KEY, const unsigned char* STR) {
     mostrarChar(tag, 16);
 
     cout << "Test desencriptado:" << endl;
-    unsigned short lenRtaRta;
+    unsigned int lenRtaRta;
     unsigned char* descifrado = OpenSSL::desencriptar(KEY, STR, lenRta, tag, lenRtaRta);
     //mostrarChar(descifrado, lenRtaRta);
 
     cout << endl;
 }
 
+char** testDataType() {
+    char** rta = new char* [10];
+    for (int i = 1;i <= 10;i++) {
+        rta[i] = new char[i];
+        for (int j = 0;j < i;j++) rta[i][j] = '*';
+    }
+    return rta;
+}
+
+void shownTestDataType(char** matriz) {
+    for (int i = 0;i < 10;i++) {
+        for (int j = 0;j < i;j++) cout << matriz[i][j];
+        cout << endl;
+    }
+}
+
 int main()
 {
-    testGenerador(120);
+    /*testGenerador(120);
     unsigned char* str = new unsigned char[38];
     for (int i = 0;i < 38;i++) str[i] = i + 64;
     testHasheo(str, 38, 10);
     const unsigned char* CLAVE = OpenSSL::hash256(Generador::generarContrasenia(120, Generador::TipoContrasenia::COMPLETA), 120);
-    testEncriptar(CLAVE, str);
-    return 0;
+    testEncriptar(CLAVE, str);*/
+    //shownTestDataType(testDataType());
+    return AES_GCM_EJEMPLO(NULL, nullptr);
 }

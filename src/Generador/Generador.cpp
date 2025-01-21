@@ -6,11 +6,11 @@ static void setRand() {
     srand(static_cast<unsigned int>(std::time(nullptr)) ^ rd());
 }
 
-static unsigned char caracterRandom(const unsigned char& BASE, const uint8_t RANGO) {
+static unsigned char caracterRandom(const unsigned char& BASE, const unsigned int RANGO) {
     return (rand() % RANGO) + BASE;
 }
 
-static bool contraFacil(unsigned char* contra, const uint8_t& LEN, const Generador::TipoContrasenia& TIPO) {
+static bool contraFacil(unsigned char* contra, const unsigned int& LEN, const Generador::TipoContrasenia& TIPO) {
     bool minuscula = false, mayuscula = false, numero = false, simbolo = false;
     for (unsigned short i = 0;i < LEN;i++) {
         if (islower(contra[i])) minuscula = true;
@@ -86,7 +86,7 @@ static unsigned char caracter(const Generador::TipoContrasenia& TIPO) {
     }
 }
 
-unsigned char* Generador::generarContrasenia(const uint8_t& CANT_CARACTERES, const Generador::TipoContrasenia& TIPO) {
+unsigned char* Generador::generarContrasenia(const unsigned int& CANT_CARACTERES, const Generador::TipoContrasenia& TIPO) {
     setRand();
     unsigned char* contra = new unsigned char[CANT_CARACTERES];
     do {

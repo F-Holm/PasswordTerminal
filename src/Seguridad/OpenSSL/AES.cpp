@@ -8,6 +8,13 @@
 #include <string>
 #include <iostream>
 
+using std::string;
+
+struct AES {
+    string str;
+    unsigned char tag[]
+};
+
 static size_t IV_SIZE = 12;
 const static unsigned char IV_BASICO = reinterpret_cast<unsigned char>("Este es un vector de inicialización super ultra mega secreto");
 const static unsigned char* IV = OpenSSL::hash256_x(&IV_BASICO, 60, IV_SIZE);
@@ -15,15 +22,20 @@ const static unsigned char* IV = OpenSSL::hash256_x(&IV_BASICO, 60, IV_SIZE);
 static size_t ADD_SIZE = 7;
 const static unsigned char ADD = reinterpret_cast<unsigned char>("-_-_-_-");
 
-const static size_t TAG_LEN = 16;
+static size_t TAG_LEN = 16;
 
-unsigned char* OpenSSL::encriptar(const unsigned char* KEY, const unsigned char* STR, const unsigned short& LEN_STR, unsigned char*& tag, unsigned short& LEN_RTA) {
+/*
+ * A library context and property query can be used to select & filter
+ * algorithm implementations. If they are NULL then the default library
+ * context and properties are used.
+ */
+static OSSL_LIB_CTX* libctx = NULL;
+static const char* propq = NULL;
+
+unsigned char* OpenSSL::encriptar(const unsigned char* KEY, const unsigned char* STR, const unsigned int& LEN_STR, unsigned char*& tag, unsigned int& LEN_RTA) {
     delete[] tag;
     tag = new unsigned char[TAG_LEN];
     unsigned char* rta;
-
-    OSSL_LIB_CTX* libctx = NULL;
-    const char* propq = NULL;
 
     EVP_CIPHER_CTX* ctx;
     EVP_CIPHER* cipher = NULL;
@@ -77,12 +89,9 @@ err:
     return nullptr;
 }
 
-unsigned char* OpenSSL::desencriptar(const unsigned char* KEY, const unsigned char* STR, const unsigned short& LEN_STR, const unsigned char* TAG, unsigned short& LEN_RTA) {
+unsigned char* OpenSSL::desencriptar(const unsigned char* KEY, const unsigned char* STR, const unsigned int& LEN_STR, const unsigned char* TAG, unsigned int& LEN_RTA) {
     unsigned char* rta;
     
-    OSSL_LIB_CTX* libctx = NULL;
-    const char* propq = NULL;
-
     EVP_CIPHER_CTX* ctx;
     EVP_CIPHER* cipher = NULL;
     int outlen, rv;
