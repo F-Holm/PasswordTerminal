@@ -52,6 +52,6 @@ int main()
     testHasheo(str, 38, 10);
     const unsigned char* CLAVE = OpenSSL::hash256(Generador::generarContrasenia(120, Generador::TipoContrasenia::COMPLETA), 120);
     testEncriptar(CLAVE, str);*/
-    //shownTestDataType(testDataType());
+    //return 0;
     return AES_GCM_EJEMPLO(NULL, nullptr);
 }

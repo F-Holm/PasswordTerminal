@@ -221,8 +221,8 @@ int AES_GCM_EJEMPLO(int argc, char **argv)
     if (!aes_gcm_encrypt())
         return EXIT_FAILURE;
 
-    if (!aes_gcm_decrypt())
-        return EXIT_FAILURE;
+    // (!aes_gcm_decrypt())
+    //    return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
 }
