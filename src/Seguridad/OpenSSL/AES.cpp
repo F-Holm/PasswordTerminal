@@ -141,6 +141,8 @@ string OpenSSL::desencriptar(string str, string key, string tag) {
     if (!EVP_CIPHER_CTX_set_params(ctx, params))
         goto err;
 
+    str = string(reinterpret_cast<const char*>(outbuf), outlen);
+
     /* Finalise: note get no output for GCM */
     rv = EVP_DecryptFinal_ex(ctx, outbuf, &outlen);
     
@@ -149,8 +151,6 @@ string OpenSSL::desencriptar(string str, string key, string tag) {
 err:
     if (error) 
         ERR_print_errors_fp(stderr);
-    else if (rv > 0)
-        str = string(reinterpret_cast<const char*>(outbuf), outlen);
 
     /* Free memory */
     EVP_CIPHER_free(cipher);

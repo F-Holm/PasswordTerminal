@@ -1,14 +1,12 @@
 #include "OpenSSL.h"
 #include <openssl/sha.h>
-#include <iostream>
 
 using std::string;
 
 string OpenSSL::hash256(string str) {
     unsigned char rta[SHA256_DIGEST_LENGTH];
     SHA256(reinterpret_cast<unsigned char*>(&str[0]), str.size(), rta);
-    string rta_str(reinterpret_cast<const char*>(rta), SHA256_DIGEST_LENGTH);
-    return rta_str;
+    return string(reinterpret_cast<const char*>(rta), SHA256_DIGEST_LENGTH);
 }
 
 string OpenSSL::hash256_x(string str, const size_t& LEN_RTA) {
