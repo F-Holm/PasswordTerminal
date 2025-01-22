@@ -1,4 +1,4 @@
-#include "OpenSSL.h"
+#include "Seguridad.h"
 #pragma comment (lib, "crypt32")
 #pragma comment (lib, "Ws2_32")
 #include <openssl/err.h>
@@ -8,7 +8,7 @@
 
 using std::string;
 
-static string IV = OpenSSL::hash256_x("Este es un vector de inicialización super ultra mega secreto", 12);
+static string IV = Seguridad::hash256_x("Este es un vector de inicialización super ultra mega secreto", 12);
 static string ADD = "Esto es algo totalmente innecesario";
 const static size_t TAG_LEN = 16;
 const static char* PROTOCOLO = "AES-256-GCM";
@@ -21,10 +21,10 @@ const static char* PROTOCOLO = "AES-256-GCM";
 static OSSL_LIB_CTX* libctx = NULL;
 static const char* propq = NULL;
 
-string OpenSSL::encriptar(string str, string key, string& tag) {
+string Seguridad::encriptar(string str, string key, string& tag) {
     bool error = true;
 
-    key = OpenSSL::hash256(key);
+    key = Seguridad::hash256(key);
 
     EVP_CIPHER_CTX* ctx;
     EVP_CIPHER* cipher = NULL;
@@ -94,10 +94,10 @@ err:
     return error ? "" : str;
 }
 
-string OpenSSL::desencriptar(string str, string key, string tag) {
+string Seguridad::desencriptar(string str, string key, string tag) {
     bool error = true;
 
-    key = OpenSSL::hash256(key);
+    key = Seguridad::hash256(key);
 
     EVP_CIPHER_CTX* ctx;
     EVP_CIPHER* cipher = NULL;

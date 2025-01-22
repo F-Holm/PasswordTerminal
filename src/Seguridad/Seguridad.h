@@ -1,24 +1,9 @@
 #pragma once
-#include <cstdint>
+#include <string>
 
-struct MensajeEncriptado {
-	unsigned char id[256];
-	unsigned int lenID;
-
-	unsigned char mail[256];
-	unsigned int lenMail;
-
-	unsigned char nombreUsuario[256];
-	unsigned int lenNombreUsuario;
-
-	unsigned char contra[256];
-	unsigned int lenContra;
-
-	unsigned char add[65536];
-	unsigned short lenAdd;
-
-	unsigned char tag[16];
-
-	void encriptar();
-	void desencriptar();
-};
+namespace Seguridad {
+	std::string hash256(std::string str);
+	std::string hash256_x(std::string str, const size_t& LEN_RTA);
+	std::string encriptar(std::string str, std::string key, std::string& tag);
+	std::string desencriptar(std::string str, std::string key, std::string tag);
+}
