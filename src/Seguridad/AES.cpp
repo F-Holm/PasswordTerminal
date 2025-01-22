@@ -2,7 +2,6 @@
 #pragma comment (lib, "crypt32")
 #pragma comment (lib, "Ws2_32")
 #include <openssl/err.h>
-#include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/core_names.h>
 
