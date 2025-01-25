@@ -14,7 +14,11 @@ public:
 
 	std::vector<Cuenta> getCuentas() const;
 	void setCuentas(const std::vector<Cuenta>& cuentas);
+
 	void agregarCuentas(const Cuenta& cuenta);
 	void modificarCuentas(const std::string, const Cuenta& cuenta);
 	void eliminarCuentas(const std::string id);
+
+	void cargarCuentas();
+	void guardarCuentas();
 };

@@ -19,7 +19,7 @@ Cuenta::Cuenta(array<DataBlock, Cuenta::cantAtributos> datos, const string KEY) 
 	this->contraTag = string(reinterpret_cast<const char*>(datos[10].str), datos[10].largo);
 	this->extraTag = string(reinterpret_cast<const char*>(datos[11].str), datos[11].largo);
 
-	this->desencriptar(KEY);
+	desencriptar(KEY);
 }
 Cuenta::Cuenta(array<string, Cuenta::cantAtributos> datos, const string KEY) {
 	this->id = datos[0];
@@ -36,7 +36,7 @@ Cuenta::Cuenta(array<string, Cuenta::cantAtributos> datos, const string KEY) {
 	this->contraTag = datos[10];
 	this->extraTag = datos[11];
 
-	this->desencriptar(KEY);
+	desencriptar(KEY);
 }
 Cuenta::~Cuenta() {}
 
