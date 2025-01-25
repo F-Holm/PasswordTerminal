@@ -9,16 +9,17 @@ private:
 	bool idUnico(const std::string id) const;
 
 public:
-	Datos();
+	Datos(const std::string KEY);
 	~Datos();
 
+	int getIndex(const std::string ID) const;
 	std::vector<Cuenta> getCuentas() const;
 	void setCuentas(const std::vector<Cuenta>& cuentas);
 
-	void agregarCuentas(const Cuenta& cuenta);
-	void modificarCuentas(const std::string, const Cuenta& cuenta);
-	void eliminarCuentas(const std::string id);
+	void agregarCuenta(const Cuenta& cuenta);
+	void modificarCuenta(const Cuenta& cuenta);
+	void eliminarCuenta(const std::string id);
 
-	void cargarCuentas();
-	void guardarCuentas();
+	void cargarCuentas(const std::string KEY);
+	void guardarCuentas(const std::string KEY);
 };
