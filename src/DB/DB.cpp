@@ -3,11 +3,11 @@
 using std::string;
 using std::vector;
 
-DataBlock::DataBlock(const unsigned int largo, unsigned char* str) {
+DataBlock::DataBlock(const size_t largo, unsigned char* str) {
 	this->largo = largo;
 	this->str = str;
 }
-DataBlock::DataBlock(const unsigned int largo, string str) {
+DataBlock::DataBlock(const size_t largo, string str) {
 	this->largo = largo;
 	this->str = reinterpret_cast<unsigned char*>(&str[0]);
 }

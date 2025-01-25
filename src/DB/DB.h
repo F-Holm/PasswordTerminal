@@ -3,11 +3,11 @@
 #include <vector>
 
 struct DataBlock {
-	unsigned int largo;
+	size_t largo;
 	unsigned char* str;
 
-	DataBlock (unsigned int largo, unsigned char* str);
-	DataBlock (unsigned int largo, std::string str);
+	DataBlock (const size_t largo, unsigned char* str);
+	DataBlock (const size_t largo, std::string str);
 	DataBlock ();
 	~DataBlock();
 };

@@ -8,7 +8,7 @@ static void setRand() {
     srand(static_cast<unsigned int>(std::time(nullptr)) ^ rd());
 }
 
-static unsigned char caracterRandom(const unsigned char& BASE, const unsigned int RANGO) {
+static unsigned char caracterRandom(const unsigned char& BASE, const uint8_t RANGO) {
     return (rand() % RANGO) + BASE;
 }
 

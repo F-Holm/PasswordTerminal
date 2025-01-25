@@ -50,7 +50,13 @@ void Datos::cargarCuentas(const string KEY) {
 }
 
 void Datos::guardarCuentas(const string KEY) {
-    return;
+    vector<DataBlock> datos;
+    for (Cuenta cuenta : cuentas) {
+        array<DataBlock, Cuenta::cantAtributos> arr;
+        arr = cuenta.escribirDataBlocks(KEY);
+        datos.insert(datos.end(), begin(arr), end(arr));
+    }
+    DB::escribir(Datos::NOMBRE_ARCHIVO, datos);
 }
 
 bool Datos::idUnico(const string ID) const {

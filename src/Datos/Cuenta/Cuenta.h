@@ -50,5 +50,5 @@ public:
 	std::string getContraTag() const;
 	std::string getExtraTag() const;
 
-	std::array<DataBlock, Cuenta::cantAtributos> escribirDataBlocks();
+	std::array<DataBlock, Cuenta::cantAtributos> escribirDataBlocks(const std::string KEY);
 };

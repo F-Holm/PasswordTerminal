@@ -101,26 +101,26 @@ std::string Cuenta::getExtraTag() const {
 	return this->extraTag;
 }
 
-void Cuenta::setIdTag(const std::string& idTag) {
+void Cuenta::setIdTag(const string& idTag) {
 	this->idTag = idTag;
 }
-void Cuenta::setDescripcionTag(const std::string& descripcionTag) {
+void Cuenta::setDescripcionTag(const string& descripcionTag) {
 	this->descripcionTag = descripcionTag;
 }
-void Cuenta::setEmailTag(const std::string& emailTag) {
+void Cuenta::setEmailTag(const string& emailTag) {
 	this->emailTag = emailTag;
 }
-void Cuenta::setNombreUsuarioTag(const std::string& nombreUsuarioTag) {
+void Cuenta::setNombreUsuarioTag(const string& nombreUsuarioTag) {
 	this->nombreUsuarioTag = nombreUsuarioTag;
 }
-void Cuenta::setContraTag(const std::string& contraTag) {
+void Cuenta::setContraTag(const string& contraTag) {
 	this->contraTag = contraTag;
 }
-void Cuenta::setExtraTag(const std::string& extraTag) {
+void Cuenta::setExtraTag(const string& extraTag) {
 	this->extraTag = extraTag;
 }
 
-void Cuenta::encriptar(const std::string KEY) {
+void Cuenta::encriptar(const string KEY) {
 	Seguridad::encriptar(KEY, id, idTag);
 	Seguridad::encriptar(KEY, descripcion, descripcionTag);
 	Seguridad::encriptar(KEY, email, emailTag);
@@ -128,7 +128,7 @@ void Cuenta::encriptar(const std::string KEY) {
 	Seguridad::encriptar(KEY, contra, contraTag);
 	Seguridad::encriptar(KEY, extra, extraTag);
 }
-void Cuenta::desencriptar(const std::string KEY) {
+void Cuenta::desencriptar(const string KEY) {
 	Seguridad::desencriptar(KEY, id, idTag);
 	Seguridad::desencriptar(KEY, descripcion, descripcionTag);
 	Seguridad::desencriptar(KEY, email, emailTag);
@@ -137,8 +137,8 @@ void Cuenta::desencriptar(const std::string KEY) {
 	Seguridad::desencriptar(KEY, extra, extraTag);
 }
 
-array<DataBlock, Cuenta::cantAtributos> Cuenta::escribirDataBlocks() {
-	Seguridad::desencriptar;
+array<DataBlock, Cuenta::cantAtributos> Cuenta::escribirDataBlocks(const string KEY) {
+	desencriptar(KEY);
 	array<DataBlock, Cuenta::cantAtributos> cuentas;
 
 	cuentas[0] = DataBlock(id.size(), id);

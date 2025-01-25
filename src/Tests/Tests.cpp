@@ -7,6 +7,7 @@ using std::string;
 using std::cout;
 using std::cin;
 using std::endl;
+using std::flush;
 
 void Tests::generador() {
     const size_t CANT_CARACTERES = 120;
@@ -44,9 +45,9 @@ void Tests::enc() {
     cout << endl;
 }
 
-void Tests::enc_x(const unsigned long long x) {
+void Tests::enc_x(const size_t x) {
     cout << endl;
-    for (unsigned long long i = 0;i < x;i++) {
+    for (size_t i = 0;i < x;i++) {
         const string STR = Generador::generarContrasenia(x, Generador::TipoContrasenia::COMPLETA);
         const string KEY = Generador::generarContrasenia(x, Generador::TipoContrasenia::COMPLETA);
         string tag;
@@ -56,6 +57,7 @@ void Tests::enc_x(const unsigned long long x) {
             cout << "Encriptación fallida\n" << STR << "\n!=\n" << RTA << "\n\n";
             return;
         }
+        else cout << '\r' << i+1 << " de " << x << " encriptaciones exitosas";
     }
-    cout << x << " encriptaciones exitosas" << "\n\n";
+    cout << endl;
 }

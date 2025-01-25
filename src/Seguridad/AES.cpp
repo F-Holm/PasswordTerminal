@@ -29,7 +29,7 @@ string Seguridad::encriptar(string str, string key, string& tag) {
     EVP_CIPHER* cipher = NULL;
     int outlen, tmplen;
     size_t gcm_ivlen = IV.size();
-    unsigned char outbuf[1024];
+    unsigned char* outbuf = new unsigned char[str.size()];
     unsigned char outtag[16];
     OSSL_PARAM params[2] = {
         OSSL_PARAM_END, OSSL_PARAM_END
@@ -87,6 +87,7 @@ err:
     }
 
     /* Free memory */
+    delete[] outbuf;
     EVP_CIPHER_free(cipher);
     EVP_CIPHER_CTX_free(ctx);
 
@@ -102,7 +103,7 @@ string Seguridad::desencriptar(string str, string key, string tag) {
     EVP_CIPHER* cipher = NULL;
     int outlen, rv;
     size_t gcm_ivlen = IV.size();
-    unsigned char outbuf[1024];
+    unsigned char* outbuf = new unsigned char[str.size()];
     OSSL_PARAM params[2] = {
         OSSL_PARAM_END, OSSL_PARAM_END
     };
@@ -152,6 +153,7 @@ err:
         ERR_print_errors_fp(stderr);
 
     /* Free memory */
+    delete[] outbuf;
     EVP_CIPHER_free(cipher);
     EVP_CIPHER_CTX_free(ctx);
 
