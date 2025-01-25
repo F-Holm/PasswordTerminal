@@ -5,6 +5,11 @@
 struct DataBlock {
 	unsigned int largo;
 	unsigned char* str;
+
+	DataBlock (unsigned int largo, unsigned char* str);
+	DataBlock (unsigned int largo, std::string str);
+	DataBlock ();
+	~DataBlock();
 };
 
 namespace DB {
