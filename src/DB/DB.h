@@ -7,7 +7,7 @@ struct DataBlock {
 	unsigned char* str;
 
 	DataBlock (const size_t largo, unsigned char* str);
-	DataBlock (const size_t largo, std::string str);
+	DataBlock (std::string str);
 	DataBlock ();
 	~DataBlock();
 };

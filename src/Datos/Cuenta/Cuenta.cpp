@@ -141,19 +141,19 @@ array<DataBlock, Cuenta::cantAtributos> Cuenta::escribirDataBlocks(const string 
 	desencriptar(KEY);
 	array<DataBlock, Cuenta::cantAtributos> cuentas;
 
-	cuentas[0] = DataBlock(id.size(), id);
-	cuentas[1] = DataBlock(descripcion.size(), descripcion);
-	cuentas[2] = DataBlock(email.size(), email);
-	cuentas[3] = DataBlock(nombreUsuario.size(), nombreUsuario);
-	cuentas[4] = DataBlock(contra.size(), contra);
-	cuentas[5] = DataBlock(extra.size(), extra);
+	cuentas[0] = DataBlock(id);
+	cuentas[1] = DataBlock(descripcion);
+	cuentas[2] = DataBlock(email);
+	cuentas[3] = DataBlock(nombreUsuario);
+	cuentas[4] = DataBlock(contra);
+	cuentas[5] = DataBlock(extra);
 
-	cuentas[6] = DataBlock(idTag.size(), idTag);
-	cuentas[7] = DataBlock(descripcionTag.size(), descripcionTag);
-	cuentas[8] = DataBlock(emailTag.size(), emailTag);
-	cuentas[9] = DataBlock(nombreUsuarioTag.size(), nombreUsuarioTag);
-	cuentas[10] = DataBlock(contraTag.size(), contraTag);
-	cuentas[11] = DataBlock(extraTag.size(), extraTag);
+	cuentas[6] = DataBlock(idTag);
+	cuentas[7] = DataBlock(descripcionTag);
+	cuentas[8] = DataBlock(emailTag);
+	cuentas[9] = DataBlock(nombreUsuarioTag);
+	cuentas[10] = DataBlock(contraTag);
+	cuentas[11] = DataBlock(extraTag);
 
 	return cuentas;
 }
