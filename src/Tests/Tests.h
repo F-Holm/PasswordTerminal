@@ -5,4 +5,5 @@ namespace Tests {
 	void hash();
 	void enc();
 	void enc_x(const size_t x);
+	void db();
 }

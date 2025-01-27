@@ -9,16 +9,28 @@ using std::ofstream;
 DataBlock::DataBlock(const size_t largo, unsigned char* str) : largo(largo), str(new unsigned char[largo]) {
 	std::memcpy(this->str, str, largo);
 }
-DataBlock::DataBlock(string str) : str(new unsigned char[largo]) {
-	std::memcpy(this->str, str.c_str(), str.size());
+DataBlock::DataBlock(string str) : largo(str.size()), str(new unsigned char[largo]) {
+	std::memcpy(this->str, reinterpret_cast<unsigned char*>(&str[0]), str.size());
 }
-DataBlock::DataBlock() {
-	this->largo = 0;
-	this->str = nullptr;
+DataBlock::DataBlock(const DataBlock& other) : largo(other.largo), str(new unsigned char[largo]) {
+	std::memcpy(this->str, other.str, largo);
 }
+DataBlock::DataBlock() : largo(0), str(nullptr) {}
 DataBlock::~DataBlock() {
 	delete[] str;
 }
+
+DataBlock& DataBlock::operator=(const DataBlock& other) {
+	if (this != &other) {
+		delete[] str;
+		largo = other.largo;
+		str = new unsigned char[largo];
+		memcpy(this->str, other.str, largo);
+	}
+	return *this;
+}
+
+
 
 vector<DataBlock> DB::leer(const string nombreArchivo) {
 	vector<DataBlock> datos;
@@ -39,7 +51,7 @@ vector<DataBlock> DB::leer(const string nombreArchivo) {
 			break;
 		}
 
-		datos.push_back(DataBlock(largo, str));
+		datos.emplace_back(largo, str);
 		delete[] str;
 	}
 	return datos;
@@ -52,7 +64,7 @@ void DB::escribir(const string nombreArchivo, vector<DataBlock> datos) {
 
 	for (DataBlock dato : datos) {
 		archivo.write(reinterpret_cast<const char*>(&dato.largo), sizeof(size_t));
-		archivo.write(reinterpret_cast<const char*>(&dato.str), dato.largo);
+		archivo.write(reinterpret_cast<const char*>(dato.str), dato.largo);
 	}
 
 	archivo.close();

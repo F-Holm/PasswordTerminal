@@ -2,12 +2,15 @@
 #include <iostream>
 #include "../Generador/Generador.h"
 #include "../Seguridad/Seguridad.h"
+#include "../DB/DB.h"
 
 using std::string;
 using std::cout;
 using std::cin;
 using std::endl;
 using std::flush;
+using std::vector;
+using std::array;
 
 void Tests::generador() {
     const size_t CANT_CARACTERES = 120;
@@ -57,7 +60,25 @@ void Tests::enc_x(const size_t x) {
             cout << "Encriptación fallida\n" << STR << "\n!=\n" << RTA << "\n\n";
             return;
         }
-        else cout << '\r' << i+1 << " de " << x << " encriptaciones exitosas";
+        else cout << '\r' << i+1 << " de " << x << " encriptaciones exitosas" << flush;
     }
-    cout << endl;
+    cout << "\n\n";
+}
+
+void Tests::db() {
+    const string n = "k.k";
+    vector<DataBlock> datos = DB::leer(n);
+    cout << datos.size() << " -> ";
+    datos.emplace_back("Zlatan");
+    datos.emplace_back("Ibrahimovic");
+    DB::escribir(n, datos);
+    datos = DB::leer(n);
+    cout << datos.size() << endl;
+    for (DataBlock dato : datos) {
+        cout << dato.largo << " -> ";
+        for (int j = 0;j < dato.largo;j++)
+            cout << dato.str[j];
+        cout << endl;
+    }
+    std::remove(n.c_str());
 }
