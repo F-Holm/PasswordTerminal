@@ -1,4 +1,6 @@
 #include "Datos.h"
+#include <iostream>
+#include <random>
 
 using std::string;
 using std::vector;
@@ -10,6 +12,28 @@ Datos::Datos(const string KEY) {
     cargarCuentas(KEY);
 }
 Datos::~Datos() {}
+
+bool Datos::idUnico(const string ID) const {
+    for (int i = 0;i < cuentas.size();i++)
+        if (cuentas[i].getId() == ID)
+            return false;
+    return true;
+}
+
+void Datos::setRand() {
+    std::random_device rd;
+    srand(static_cast<unsigned int>(std::time(nullptr)) ^ rd());
+}
+
+string Datos::generarIdUnico() const {
+    string str;
+    setRand();
+    do {
+        int num = rand();
+        str = string(reinterpret_cast<const char*>(&num), sizeof(int));
+    } while (!idUnico(str));
+    return str;
+}
 
 int Datos::getIndex(const string ID) const {
     for (int i = 0;i < cuentas.size();i++)
@@ -25,9 +49,9 @@ void Datos::setCuentas(const vector<Cuenta>& nuevasCuentas) {
     cuentas = nuevasCuentas;
 }
 
-void Datos::agregarCuenta(const Cuenta& cuenta) {
-    if (idUnico(cuenta.getId()))
-        cuentas.push_back(cuenta);
+void Datos::agregarCuenta(Cuenta& cuenta) {
+    cuenta.setId(generarIdUnico());
+    cuentas.push_back(cuenta);
 }
 
 void Datos::modificarCuenta(const Cuenta& cuenta) {
@@ -41,27 +65,28 @@ void Datos::eliminarCuenta(const std::string id) {
 void Datos::cargarCuentas(const string KEY) {
     vector<DataBlock> datos = DB::leer(Datos::NOMBRE_ARCHIVO);
 
-    for (int i = 0;i < datos.size();i += Cuenta::cantAtributos) {
+    for (size_t i = 0;i < datos.size();i += Cuenta::cantAtributos) {
         array<DataBlock, Cuenta::cantAtributos> c;
-        for (int j = i;j < i + Cuenta::cantAtributos;j++)
-            c[j] = datos[j - i];
-        cuentas.push_back(Cuenta(c, KEY));
+
+        for (int j = 0;j < Cuenta::cantAtributos;j++)
+            c[j] = datos[i + j];
+
+        cuentas.emplace_back(c, KEY);
     }
 }
 
 void Datos::guardarCuentas(const string KEY) {
     vector<DataBlock> datos;
+
     for (Cuenta cuenta : cuentas) {
+
         array<DataBlock, Cuenta::cantAtributos> arr;
         arr = cuenta.escribirDataBlocks(KEY);
-        datos.insert(datos.end(), begin(arr), end(arr));
-    }
-    DB::escribir(Datos::NOMBRE_ARCHIVO, datos);
-}
+        for (DataBlock dataBlock : arr)
+            datos.push_back(dataBlock);
+        //datos.insert(datos.end(), begin(arr), end(arr));
 
-bool Datos::idUnico(const string ID) const {
-    for (int i = 0;i < cuentas.size();i++)
-        if (cuentas[i].getId() == ID)
-            return false;
-    return true;
+    }
+
+    DB::escribir(Datos::NOMBRE_ARCHIVO, datos);
 }

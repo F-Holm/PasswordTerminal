@@ -2,7 +2,7 @@
 #include <iostream>
 #include "../Generador/Generador.h"
 #include "../Seguridad/Seguridad.h"
-#include "../DB/DB.h"
+#include "../Datos/Datos/Datos.h"
 
 using std::string;
 using std::cout;
@@ -49,7 +49,6 @@ void Tests::enc() {
 }
 
 void Tests::enc_x(const size_t x) {
-    cout << endl;
     for (size_t i = 0;i < x;i++) {
         const string STR = Generador::generarContrasenia(x, Generador::TipoContrasenia::COMPLETA);
         const string KEY = Generador::generarContrasenia(x, Generador::TipoContrasenia::COMPLETA);
@@ -66,7 +65,7 @@ void Tests::enc_x(const size_t x) {
 }
 
 void Tests::db() {
-    const string n = "k.k";
+    const string n = "o.o";
     vector<DataBlock> datos = DB::leer(n);
     cout << datos.size() << " -> ";
     datos.emplace_back("Zlatan");
@@ -81,4 +80,26 @@ void Tests::db() {
         cout << endl;
     }
     std::remove(n.c_str());
+    cout << endl;
+}
+
+void Tests::global(const size_t x) {
+    const static string clave = Generador::generarContrasenia(1000, Generador::TipoContrasenia::COMPLETA);
+    Datos datos(clave);
+    for (size_t i = 0;i < x;i++) {
+        Cuenta c({ std::to_string(i + 1), std::to_string(i + 1), std::to_string(i + 1), std::to_string(i + 1), std::to_string(i + 1) });
+        datos.agregarCuenta(c);
+    }
+    datos.guardarCuentas(clave);
+    datos = Datos(clave);
+    for (size_t i = 0;i < datos.getCuentas().size();i++) {
+        if ( datos.getCuentas()[i].getDescripcion() == std::to_string(i + 1) )
+            cout << '\r' << i + 1 << " de " << x << " guardados exitosos" << flush;
+        else {
+            cout << "ERROR -> " << datos.getCuentas()[i].getDescripcion();
+            break;
+        }
+    }
+    std::remove(Datos::NOMBRE_ARCHIVO.c_str());
+    cout << "\n\n";
 }

@@ -3,20 +3,23 @@
 
 class Datos {
 private:
-	const static std::string NOMBRE_ARCHIVO;
 	std::vector<Cuenta> cuentas;
 
 	bool idUnico(const std::string id) const;
+	std::string generarIdUnico() const;
+	static void setRand();
 
 public:
 	Datos(const std::string KEY);
 	~Datos();
 
+	const static std::string NOMBRE_ARCHIVO;
+
 	int getIndex(const std::string ID) const;
 	std::vector<Cuenta> getCuentas() const;
 	void setCuentas(const std::vector<Cuenta>& cuentas);
 
-	void agregarCuenta(const Cuenta& cuenta);
+	void agregarCuenta(Cuenta& cuenta);
 	void modificarCuenta(const Cuenta& cuenta);
 	void eliminarCuenta(const std::string id);
 

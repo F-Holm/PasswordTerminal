@@ -30,7 +30,7 @@ string Seguridad::encriptar(string str, string key, string& tag) {
     int outlen, tmplen;
     size_t gcm_ivlen = IV.size();
     unsigned char* outbuf = new unsigned char[str.size()];
-    unsigned char outtag[16];
+    unsigned char outtag[TAG_LEN];
     OSSL_PARAM params[2] = {
         OSSL_PARAM_END, OSSL_PARAM_END
     };

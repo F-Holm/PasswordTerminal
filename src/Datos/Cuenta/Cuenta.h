@@ -8,8 +8,7 @@ private:
 
 	std::string idTag, descripcionTag, emailTag, nombreUsuarioTag, contraTag, extraTag;
 
-	void encriptar(const std::string KEY);
-	void desencriptar(const std::string KEY);
+	
 
 	void setIdTag(const std::string& idTag);
 	void setDescripcionTag(const std::string& descripcionTag);
@@ -23,6 +22,7 @@ public:
 
 	Cuenta(std::array<DataBlock, Cuenta::cantAtributos> datos, const std::string KEY);
 	Cuenta(std::array<std::string, Cuenta::cantAtributos> datos, const std::string KEY);
+	Cuenta(std::array<std::string, Cuenta::cantAtributos / 2 - 1> datos);
 	~Cuenta();
 
 	std::string getId() const;
@@ -51,4 +51,7 @@ public:
 	std::string getExtraTag() const;
 
 	std::array<DataBlock, Cuenta::cantAtributos> escribirDataBlocks(const std::string KEY);
+
+	void encriptar(const std::string KEY);
+	void desencriptar(const std::string KEY);
 };
