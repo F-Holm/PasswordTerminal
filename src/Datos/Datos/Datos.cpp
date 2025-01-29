@@ -1,5 +1,4 @@
 #include "Datos.h"
-#include <iostream>
 #include <random>
 
 using std::string;
@@ -82,9 +81,7 @@ void Datos::guardarCuentas(const string KEY) {
 
         array<DataBlock, Cuenta::cantAtributos> arr;
         arr = cuenta.escribirDataBlocks(KEY);
-        for (DataBlock dataBlock : arr)
-            datos.push_back(dataBlock);
-        //datos.insert(datos.end(), begin(arr), end(arr));
+        datos.insert(datos.end(), begin(arr), end(arr));
 
     }
 

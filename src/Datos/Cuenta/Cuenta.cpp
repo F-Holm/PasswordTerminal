@@ -1,6 +1,5 @@
 #include "Cuenta.h"
 #include "../../Seguridad/Seguridad.h"
-#include <iostream>
 
 using std::string;
 using std::array;
